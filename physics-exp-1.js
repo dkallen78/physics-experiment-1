@@ -4,7 +4,9 @@ space.appendChild(canvas);
 const ctx = canvas.getContext("2d");
 ctx.fillStyle = "#ffffff";
 
-let temporalResolution = 100;
+const G = 6.674 * (10 ** -11);
+
+let temporalResolution = 10;
 
 function makeCanvas(id, height = 501, width = 501) {
   //----------------------------------------------------//
@@ -35,14 +37,19 @@ function stop() {
   clearInterval(reality);
 }
 
+function accelerate(object) {
+  object.velocity += .1;
+}
+
 function move(object) {
-  object.y++;
+  object.y += object.velocity;
 }
 
 class Point {
   constructor(x, y) {
     this.x = x;
     this.y = y;
+    this.velocity = 0;
   }
 
   draw() {
@@ -55,6 +62,7 @@ let object = new Point(250, 5);
 let reality = setInterval(function() {
   ctx.clearRect(0, 0, 501, 501);
 
+  accelerate(object);
   move(object);
 
   object.draw();
