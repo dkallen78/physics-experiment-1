@@ -30,7 +30,7 @@ function makeCanvas(id, height = 501, width = 501) {
 
 function reset() {
   //ctx.clearRect(0, 0, 501, 501);
-  object = new Point(250, 0);
+  object = new Point(5, 5);
 }
 
 function stop() {
@@ -38,18 +38,20 @@ function stop() {
 }
 
 function accelerate(object) {
-  object.velocity += .1;
+  object.velocityY += .098; //zdqe32;
 }
 
 function move(object) {
-  object.y += object.velocity;
+  object.x += object.velocityX;
+  object.y += object.velocityY;
 }
 
 class Point {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.velocity = 0;
+    this.velocityX = 2;
+    this.velocityY = 0;
   }
 
   draw() {
@@ -57,7 +59,7 @@ class Point {
   }
 }
 
-let object = new Point(250, 5);
+let object = new Point(5, 5);
 
 let reality = setInterval(function() {
   ctx.clearRect(0, 0, 501, 501);
@@ -66,5 +68,9 @@ let reality = setInterval(function() {
   move(object);
 
   object.draw();
+
+  if (object.x > 501 || object.x < 0 || object.y > 501 || object.y < 0) {
+    reset();
+  }
 
 }, temporalResolution);
