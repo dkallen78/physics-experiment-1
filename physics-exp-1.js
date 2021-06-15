@@ -6,6 +6,9 @@ ctx.fillStyle = "#ffffff";
 
 const G = 6.674 * (10 ** -11);
 
+initialX = 5;
+initialY = 500;
+
 let temporalResolution = 10;
 
 function makeCanvas(id, height = 501, width = 501) {
@@ -29,19 +32,40 @@ function makeCanvas(id, height = 501, width = 501) {
 }
 
 function reset() {
-  //ctx.clearRect(0, 0, 501, 501);
-  object = new Point(5, 5);
+  //----------------------------------------------------//
+  //Resets the simulation to its starting point         //
+  //----------------------------------------------------//
+
+  ctx.clearRect(0, 0, 501, 501);
+  object = new Point(initialX, initialY);
 }
 
 function stop() {
+  //----------------------------------------------------//
+  //Stops the simulation loop                           //
+  //----------------------------------------------------//
+
   clearInterval(reality);
 }
 
 function accelerate(object) {
+  //----------------------------------------------------//
+  //Changes the velocity of an object                   //
+  //----------------------------------------------------//
+  //object(Point)-> object to change the velocity of    //
+  //----------------------------------------------------//
+
   object.velocityY += .098; //zdqe32;
 }
 
 function move(object) {
+  //----------------------------------------------------//
+  //Changes the x and y values of a Point object based  //
+  //  on its velocity                                   //
+  //----------------------------------------------------//
+  //object(Point)-> object to be moved                  //
+  //----------------------------------------------------//
+
   object.x += object.velocityX;
   object.y += object.velocityY;
 }
@@ -51,7 +75,7 @@ class Point {
     this.x = x;
     this.y = y;
     this.velocityX = 2;
-    this.velocityY = 0;
+    this.velocityY = -9;
   }
 
   draw() {
@@ -59,10 +83,14 @@ class Point {
   }
 }
 
-let object = new Point(5, 5);
+let object = new Point(initialX, initialY);
 
 let reality = setInterval(function() {
-  ctx.clearRect(0, 0, 501, 501);
+  //----------------------------------------------------//
+  //The simulation loop                                 //
+  //----------------------------------------------------//
+
+  //ctx.clearRect(0, 0, 501, 501);
 
   accelerate(object);
   move(object);
@@ -70,6 +98,11 @@ let reality = setInterval(function() {
   object.draw();
 
   if (object.x > 501 || object.x < 0 || object.y > 501 || object.y < 0) {
+    //----------------------------------------------------//
+    //If the Point object leaves the field of view of the //
+    //  canvas it's reset to its initial state            //
+    //----------------------------------------------------//
+
     reset();
   }
 
