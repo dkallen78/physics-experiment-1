@@ -1,23 +1,43 @@
-const canvas = makeCanvas("spaceCanvas");
+//
+//Initial height of the view
+const initHeight = 750;
+//
+//Initial width of the view
+const initWidth = 750;
+const canvas = makeCanvas("spaceCanvas", initHeight, initWidth);
 const space = document.getElementById("space");
 space.appendChild(canvas);
 const ctx = canvas.getContext("2d");
 ctx.fillStyle = "#ffffff";
 
+//
+//A modified gravitational constant
 const G = 6.674 * (10 ** -6);
-
-const initX = 20;
-const initY = 500;
+//
+//Initial x position (left to right)
+const initX = 100;
+//
+//Initial y position (top to bottom)
+const initY = 600;
+//
+//Initial x velocity (- values are towards the left)
 const initVelX = 0;
+//
+//Initial y velocity (- values are towards the top)
 const initVelY = -.5;
+//
+//Mass of the center object (orbiting object has a mass of 1)
 const solarMass = 100_000_000;
-const temporalResolution = 10;
+//
+//How often the simulation updates
+const temporalResolution = 5;
+
 
 const distance = document.getElementById("dist");
 const xVel = document.getElementById("velX");
 const yVel = document.getElementById("velY");
 
-function makeCanvas(id, height = 501, width = 501) {
+function makeCanvas(id, height = 1000, width = 1000) {
   //----------------------------------------------------//
   //Makes a canvas element                              //
   //----------------------------------------------------//
@@ -67,7 +87,7 @@ function stop() {
   clearInterval(reality);
 }
 
-function findGrav(obj1, obj2) {
+/*function findGrav(obj1, obj2) {
   //----------------------------------------------------//
   //Finds the gravitational force between two objects   //
   //----------------------------------------------------//
@@ -79,44 +99,57 @@ function findGrav(obj1, obj2) {
   //----------------------------------------------------//
 
   return G * ((obj1.mass * obj2.mass) / dist(obj1, obj2));
-}
+}*/
 
 function doGrav(obj1, obj2) {
+  //----------------------------------------------------//
+  //Calculates the forces of gravity between the two    //
+  //  objects and adjusts their velocity accordingly    //
+  //----------------------------------------------------//
+  //obj1(Point)-> first object                          //
+  //obj2(Point)-> second object                         //
+  //----------------------------------------------------//
 
   //
   //The angle between two objects
-
-  /*if (obj1.x >= 250) {
-    angle = Math.atan((obj1.x - obj2.x) / obj1.y - obj2.y);
-  } else {
-    angle = Math.atan((obj1.y - obj2.y) / (obj1.x - obj2.x));
-  }*/
   angle = Math.atan((obj1.y - obj2.y) / (obj1.x - obj2.x));
-  //angle = Math.atan((obj1.x - obj2.x) / obj1.y - obj2.y);
 
-  if (angle < -1.5) {
-    angle = Math.abs(angle);
-  }
-
+  //
+  //Finds the distance between my objects
   let r = dist(obj1, obj2);
+
+  //
+  //Finds the force exerted by gravity
   let grav = G * ((obj1.mass * obj2.mass) / (r ** 2));
+
+  //
+  //Based on the previously calculated angle, determines
+  //  the force exerted along the x axis
   let xChange = grav * Math.cos(angle);
+  //
+  //Ensures the object is always going towards the "sun"
+  //  Because I need this, it means my math is janky somewhere...
   if (obj1.x >= obj2.x && xChange > 0) {
     xChange *= -1;
   } else if (obj1.x < obj2.x && xChange < 0) {
     xChange *= -1;
   }
+  //
+  //Based on the previously calculated angle, determines
+  //  the force exerted along the y axis
   let yChange = grav * Math.sin(angle);
+  //
+  //Ensures the object is always going towards the "sun"
+  //  Because I need this, it means my math is janky somewhere...
   if (obj1.y >= obj2.y && yChange > 0) {
     yChange *= -1;
   } else if (obj1.y < obj2.y && yChange < 0) {
     yChange *= -1;
   }
 
-  console.log(obj1.x, obj1.x - obj2.x, xChange);
-  console.log(obj1.y, obj1.y - obj2.y, yChange);
-  console.log(angle);
-
+  //console.log(obj1.x, obj1.x - obj2.x, xChange);
+  //console.log(obj1.y, obj1.y - obj2.y, yChange);
+  //console.log(angle);
 
   obj1.velocityX += xChange;
   obj1.velocityY += yChange;
@@ -160,7 +193,7 @@ class Point {
 }
 
 let object = new Point(initX, initY, initVelX, initVelY);
-let sol = new Point(250, 250, 0, 0);
+let sol = new Point(initHeight / 2, initWidth / 2, 0, 0);
 sol.mass = solarMass;
 
 let reality = setInterval(function() {
@@ -181,13 +214,13 @@ let reality = setInterval(function() {
   xVel.innerHTML = object.velocityX;
   yVel.innerHTML = object.velocityY;
 
-  if (object.x > 501 || object.x < 0 || object.y > 501 || object.y < 0) {
+  /*if (object.x > 501 || object.x < 0 || object.y > 501 || object.y < 0) {
     //----------------------------------------------------//
     //If the Point object leaves the field of view of the //
     //  canvas it's reset to its initial state            //
     //----------------------------------------------------//
 
     stop();
-  }
+  }*/
 
 }, temporalResolution);
