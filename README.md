@@ -8,7 +8,7 @@ the back of my mind to do a simulation.
 
 This is all based on the equation for gravity based on Newton's work:
 
-`F = G * ((m<sub>1</sub> * m<sub>2</sub>) / r²)`
+F = G * ((m<sub>1</sub> * m<sub>2</sub>) / r²)
 
 There's still some things I don't understand
 about trigonometry but what I've built works for now.
