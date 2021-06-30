@@ -10,20 +10,22 @@ space.appendChild(canvas);
 const ctx = canvas.getContext("2d");
 ctx.fillStyle = "#ffffff";
 let avgDist = [0, 0];
-let sdPop = [];
+let distVar = [0, 0];
 
 //
 //A modified gravitational constant
 const G = 6.674 * (10 ** -6);
 
+const cyclesSpan = document.getElementById("cycles");
 const distance = document.getElementById("dist");
 const xVel = document.getElementById("velX");
 const yVel = document.getElementById("velY");
 const avgDistance = document.getElementById("avgDist");
 const stdDev = document.getElementById("stdDev");
+const score = document.getElementById("score");
 
 function makeCanvas(id, height = 500, width = 500) {
-  //----------------------------------------------------//
+  /*----------------------------------------------------//
   //Makes a canvas element                              //
   //----------------------------------------------------//
   //id(string)-> id of the canvas element               //
@@ -31,7 +33,7 @@ function makeCanvas(id, height = 500, width = 500) {
   //width(integer)-> width of the canvas element        //
   //----------------------------------------------------//
   //return(element)-> canvas element                    //
-  //----------------------------------------------------//
+  //----------------------------------------------------*/
 
   var canvas = document.createElement("canvas");
   canvas.id = id;
@@ -43,7 +45,7 @@ function makeCanvas(id, height = 500, width = 500) {
 }
 
 function getAverage(average, newNumber) {
-  //----------------------------------------------------//
+  /*----------------------------------------------------//
   //Calculates an average given the previous average,   //
   //  the number of items averaged, and a new value     //
   //----------------------------------------------------//
@@ -55,98 +57,70 @@ function getAverage(average, newNumber) {
   //----------------------------------------------------//
   //return(array) -> the array w/ the updated average   //
   //  and number of values averaged so far              //
-  //----------------------------------------------------//
+  //----------------------------------------------------*/
 
   average[0] = ((average[0] * average[1]) + parseFloat(newNumber, 10)) / (average[1] + 1);
   average[1]++;
   return average;
 }
 
-function getSD(average, population) {
-  //----------------------------------------------------//
-  //Calculates standard deviation of the runtimes       //
-  //float-> average: average program runtime            //
-  //array-> population: an array of runtimes            //
-  //----------------------------------------------------//
-
-  //average = Number(average);
-  let variance = 0;
-  for (let i = 0; i < population.length; i++) {
-    variance += (population[i] - average) ** 2;
-  }
-  variance /= population.length;
-  return Math.sqrt(variance).toFixed(3);;
-}
-
 function dist(obj1, obj2) {
-  //----------------------------------------------------//
+  /*----------------------------------------------------//
   //Finds the pixel distance between two points         //
   //----------------------------------------------------//
   //obj1(Point)-> first point                           //
   //obj2(Point)-> second point                          //
   //----------------------------------------------------//
   //return(float)-> pixel distance between two points   //
-  //----------------------------------------------------//
+  //----------------------------------------------------*/
 
   return (Math.sqrt(((obj1.x - obj2.x) ** 2) + ((obj1.y - obj2.y) ** 2))).toFixed(4);
 }
 
 function reset() {
-  //----------------------------------------------------//
+  /*----------------------------------------------------//
   //Resets the simulation to its starting point         //
-  //----------------------------------------------------//
+  //----------------------------------------------------*/
 
   stop();
   avgDist = [0, 0];
+  distVar = [0, 0];
+  sdPop = [];
   start();
 }
 
 function stop() {
-  //----------------------------------------------------//
+  /*----------------------------------------------------//
   //Stops the simulation loop                           //
-  //----------------------------------------------------//
+  //----------------------------------------------------*/
 
   clearInterval(reality);
 }
 
-/*function findGrav(obj1, obj2) {
-  //----------------------------------------------------//
-  //Finds the gravitational force between two objects   //
-  //----------------------------------------------------//
-  //obj1(Point)-> first object                          //
-  //obj2(Point)-> second object                         //
-  //----------------------------------------------------//
-  //return(float)-> gravitational force in pixels per   //
-  //  loop                                              //
-  //----------------------------------------------------//
-
-  return G * ((obj1.mass * obj2.mass) / dist(obj1, obj2));
-}*/
-
 function doGrav(obj1, obj2) {
-  //----------------------------------------------------//
+  /*----------------------------------------------------//
   //Calculates the forces of gravity between the two    //
   //  objects and adjusts their velocity accordingly    //
   //----------------------------------------------------//
   //obj1(Point)-> first object                          //
   //obj2(Point)-> second object                         //
-  //----------------------------------------------------//
+  //----------------------------------------------------*/
 
   //
   //Finds the distance between my objects
   let r = dist(obj1, obj2);
-  sdPop.push(r);
+  //
+  //Finds the average distance between the objects
   avgDist = getAverage(avgDist, r);
-  //console.log(avgDist, r);
-
+  //
+  //Finds the variance of the averages
+  distVar = getAverage(distVar, ((r - avgDist[0]) ** 2));
   //
   //Finds the force exerted by gravity
   let grav = G * ((obj1.mass * obj2.mass) / (r ** 2));
-
   //
   //The angle between two objects
   angle = Math.atan((obj1.y - obj2.y) / (obj1.x - obj2.x));
-
   //
   //Based on the previously calculated angle, determines
   //  the force exerted along the x axis
@@ -172,22 +146,17 @@ function doGrav(obj1, obj2) {
     yChange *= -1;
   }
 
-  //console.log(obj1.x, obj1.x - obj2.x, xChange);
-  //console.log(obj1.y, obj1.y - obj2.y, yChange);
-  //console.log(angle);
-
   obj1.velocityX += xChange;
   obj1.velocityY += yChange;
-
 }
 
 function move(object) {
-  //----------------------------------------------------//
+  /*----------------------------------------------------//
   //Changes the x and y values of a Point object based  //
   //  on its velocity                                   //
   //----------------------------------------------------//
   //object(Point)-> object to be moved                  //
-  //----------------------------------------------------//
+  //----------------------------------------------------*/
 
   object.x += object.velocityX;
   object.y += object.velocityY;
@@ -223,12 +192,13 @@ function start() {
   let object = new Point(initX, initY, initVelX, initVelY);
   let sol = new Point(initHeight / 2, initWidth / 2, 0, 0);
   sol.mass = solarMass;
+  let cycles = 0;
 
   reality = setInterval(function() {
     //----------------------------------------------------//
     //The simulation loop                                 //
     //----------------------------------------------------//
-
+    cycles++;
     if (!trails) {
       ctx.clearRect(0, 0, initHeight, initWidth);
     }
@@ -238,11 +208,13 @@ function start() {
 
     object.draw();
     sol.draw();
+    cyclesSpan.innerHTML = cycles;
     distance.innerHTML = dist(object, sol);
     xVel.innerHTML = object.velocityX;
     yVel.innerHTML = object.velocityY;
     avgDistance.innerHTML = avgDist[0];
-    stdDev.innerHTML = getSD(avgDist[0], sdPop);
+    stdDev.innerHTML = Math.sqrt(distVar[0]);
+    score.innerHTML = avgDist[0] * Math.sqrt(distVar[0]);
 
   }, temporalResolution);
 }
