@@ -48,7 +48,7 @@ function dist(obj1, obj2) {
   //return(float)-> pixel distance between two points   //
   //----------------------------------------------------//
 
-  return Math.sqrt(((obj1.x - obj2.x) ** 2) + ((obj1.y - obj2.y) ** 2));
+  return (Math.sqrt(((obj1.x - obj2.x) ** 2) + ((obj1.y - obj2.y) ** 2))).toFixed(4);
 }
 
 function reset() {
@@ -106,7 +106,7 @@ function doGrav(obj1, obj2) {
   //
   //Based on the previously calculated angle, determines
   //  the force exerted along the x axis
-  let xChange = grav * Math.cos(angle);
+  let xChange = grav * Math.cos(angle).toFixed(4);
   //
   //Ensures the object is always going towards the "sun"
   //  Because I need this, it means my math is janky somewhere...
@@ -118,7 +118,7 @@ function doGrav(obj1, obj2) {
   //
   //Based on the previously calculated angle, determines
   //  the force exerted along the y axis
-  let yChange = grav * Math.sin(angle);
+  let yChange = grav * Math.sin(angle).toFixed(4);
   //
   //Ensures the object is always going towards the "sun"
   //  Because I need this, it means my math is janky somewhere...
@@ -170,8 +170,8 @@ function start() {
 
   const initX = parseInt(document.getElementById("xPos").value, 10);
   const initY = parseInt(document.getElementById("yPos").value, 10);
-  const initVelX = parseInt(document.getElementById("xVel").value, 10);
-  const initVelY = parseInt(document.getElementById("yVel").value, 10);
+  const initVelX = parseFloat(document.getElementById("xVel").value, 10);
+  const initVelY = parseFloat(document.getElementById("yVel").value, 10);
   const solarMass = parseInt(document.getElementById("solMass").value, 10);
   const temporalResolution = parseInt(document.getElementById("tempRes").value, 10);
   const trails = document.getElementById("trails").checked;
@@ -198,14 +198,17 @@ function start() {
     xVel.innerHTML = object.velocityX;
     yVel.innerHTML = object.velocityY;
 
-    /*if (object.x > 501 || object.x < 0 || object.y > 501 || object.y < 0) {
-      //----------------------------------------------------//
-      //If the Point object leaves the field of view of the //
-      //  canvas it's reset to its initial state            //
-      //----------------------------------------------------//
-
-      stop();
-    }*/
-
   }, temporalResolution);
 }
+
+function init() {
+  const initX = document.getElementById("xPos").value = 150;
+  const initY = document.getElementById("yPos").value = 500;
+  const initVelX = document.getElementById("xVel").value = 0;
+  const initVelY = document.getElementById("yVel").value = -.5;
+  const solarMass = document.getElementById("solMass").value = 100000000;
+  const temporalResolution = document.getElementById("tempRes").value = 10;
+  const trails = document.getElementById("trails").checked = true;
+}
+
+init();
