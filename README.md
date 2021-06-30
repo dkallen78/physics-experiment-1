@@ -8,15 +8,15 @@ the back of my mind to do a simulation.
 
 This is all based on the equation for gravity based on Newton's work:
 
-F = G * ((m<sub>1</sub> * m<sub>2</sub>) / r²)
+##F = G * ((m<sub>1</sub> * m<sub>2</sub>) / r²)
 
-Where F is force or change in velocity
+###Where F is force or change in velocity
 
-G is the gravitational constant which is 6.674 * 10<sup>-11</sup>
+###G is the gravitational constant which is 6.674 * 10<sup>-11</sup>
 
-m<sub>1</sub> and m<sub>2</sub> are the masses of the two objects, and
+###m<sub>1</sub> and m<sub>2</sub> are the masses of the two objects, and
 
-r is the distance between those objects.
+###r is the distance between those objects.
 
 There's still some things I don't understand
 about trigonometry but what I've built works for now.
