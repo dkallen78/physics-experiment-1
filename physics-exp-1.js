@@ -18,13 +18,13 @@ const G = 6.674 * (10 ** -6);
 const initX = 100;
 //
 //Initial y position (top to bottom)
-const initY = 600;
+const initY = 750 / 2;
 //
 //Initial x velocity (- values are towards the left)
 const initVelX = 0;
 //
 //Initial y velocity (- values are towards the top)
-const initVelY = -.5;
+const initVelY = -1
 //
 //Mass of the center object (orbiting object has a mass of 1)
 const solarMass = 100_000_000;
@@ -37,7 +37,7 @@ const distance = document.getElementById("dist");
 const xVel = document.getElementById("velX");
 const yVel = document.getElementById("velY");
 
-function makeCanvas(id, height = 1000, width = 1000) {
+function makeCanvas(id, height = 500, width = 500) {
   //----------------------------------------------------//
   //Makes a canvas element                              //
   //----------------------------------------------------//
@@ -111,16 +111,16 @@ function doGrav(obj1, obj2) {
   //----------------------------------------------------//
 
   //
-  //The angle between two objects
-  angle = Math.atan((obj1.y - obj2.y) / (obj1.x - obj2.x));
-
-  //
   //Finds the distance between my objects
   let r = dist(obj1, obj2);
 
   //
   //Finds the force exerted by gravity
   let grav = G * ((obj1.mass * obj2.mass) / (r ** 2));
+
+  //
+  //The angle between two objects
+  angle = Math.atan((obj1.y - obj2.y) / (obj1.x - obj2.x));
 
   //
   //Based on the previously calculated angle, determines

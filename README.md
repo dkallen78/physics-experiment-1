@@ -45,19 +45,24 @@ they are and how fast they're going along the x and y axes.
 
 To find the distance we need the Pythagorean Theorem: a<sup>2</sup> + b<sup>2</sup> =
 c<sup>2</sup>. With some refactoring to solve for c we can find our distance:
+
 `r = Math.sqrt(((obj1.x - obj2.x) ** 2) + ((obj1.y - obj2.y) ** 2));`
 
 2. Find the attractive force between the objects.
 
 We've got the values we need to find the force of gravity between our two objects,
-we just need to plug in our numbers: `grav = G * ((obj1.mass * obj2.mass) / (r ** 2));`
+we just need to plug in our numbers:
+
+`grav = G * ((obj1.mass * obj2.mass) / (r ** 2));`
 
 3. Find the angle between the two objects.
 
 I need to do this to calculate the velocity change (a.k.a. force) along the x and
 y axes each cycle of the simulation. To do this we need 𝕋𝕣𝕚𝕘𝕠𝕟𝕠𝕞𝕖𝕥𝕣𝕪®. Since we know the relative x and y positions of the two objects we need to use JavaScript's `Math.atan();` function. `Math.atan(opposite/adjacent);` will give us the angle in radians between
 our objects. In this case I used the y distance between the two objects for opposite
-and the x distance for adjacent: `angle = Math.atan((obj1.y - obj2.y) / (obj1.x - obj2.x));`
+and the x distance for adjacent:
+
+`angle = Math.atan((obj1.y - obj2.y) / (obj1.x - obj2.x));`
 
 4. Calculate the change in velocity along the x and y axes.
 
@@ -65,4 +70,10 @@ Based on step 2 we know the force (change in velocity this cycle) at which our o
 is being propelled. Based on step 2 we know in which direction that propulsion should
 be. Unfortunately, in a Cartesian system like Canvas we can only manipulate movement
 either up and down or left and right. To convert our force at an angle to two forces
-along the x and y axes we need more 𝕋𝕣𝕚𝕘𝕠𝕟𝕠𝕞𝕖𝕥𝕣𝕪®.
+along the x and y axes we need more 𝕋𝕣𝕚𝕘𝕠𝕟𝕠𝕞𝕖𝕥𝕣𝕪®. This time it's more simple. To
+find the x value we use the `Math.cos();` function and to find the y value we use
+the `Math.sin();` function:
+
+`xChange = grav * Math.cos(angle);`
+
+`yChange = grav * Math.sin(angle);`
