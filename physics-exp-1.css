@@ -1,3 +1,8 @@
+#gridBox {
+  display: grid;
+  grid-template-columns: auto auto;
+}
+
 #space canvas {
     background-color: black;
 }

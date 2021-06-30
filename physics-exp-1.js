@@ -13,25 +13,6 @@ ctx.fillStyle = "#ffffff";
 //
 //A modified gravitational constant
 const G = 6.674 * (10 ** -6);
-//
-//Initial x position (left to right)
-const initX = 100;
-//
-//Initial y position (top to bottom)
-const initY = 750 / 2;
-//
-//Initial x velocity (- values are towards the left)
-const initVelX = 0;
-//
-//Initial y velocity (- values are towards the top)
-const initVelY = -1
-//
-//Mass of the center object (orbiting object has a mass of 1)
-const solarMass = 100_000_000;
-//
-//How often the simulation updates
-const temporalResolution = 5;
-
 
 const distance = document.getElementById("dist");
 const xVel = document.getElementById("velX");
@@ -75,8 +56,8 @@ function reset() {
   //Resets the simulation to its starting point         //
   //----------------------------------------------------//
 
-  ctx.clearRect(0, 0, 501, 501);
-  object = new Point(initX, initY, initVelX, initVelY);
+  stop();
+  start();
 }
 
 function stop() {
@@ -156,16 +137,6 @@ function doGrav(obj1, obj2) {
 
 }
 
-function earthG(object) {
-  //----------------------------------------------------//
-  //Changes the velocity of an object                   //
-  //----------------------------------------------------//
-  //object(Point)-> object to change the velocity of    //
-  //----------------------------------------------------//
-
-  object.velocityY += .098; //zdqe32;
-}
-
 function move(object) {
   //----------------------------------------------------//
   //Changes the x and y values of a Point object based  //
@@ -192,35 +163,49 @@ class Point {
   }
 }
 
-let object = new Point(initX, initY, initVelX, initVelY);
-let sol = new Point(initHeight / 2, initWidth / 2, 0, 0);
-sol.mass = solarMass;
+function start() {
 
-let reality = setInterval(function() {
-  //----------------------------------------------------//
-  //The simulation loop                                 //
-  //----------------------------------------------------//
-
-  //ctx.clearRect(0, 0, 501, 501);
-
-  //earthG(object);
-  doGrav(object, sol);
-  move(object);
+  ctx.clearRect(0, 0, initHeight, initWidth);
 
 
-  object.draw();
-  sol.draw();
-  distance.innerHTML = dist(object, sol);
-  xVel.innerHTML = object.velocityX;
-  yVel.innerHTML = object.velocityY;
+  const initX = parseInt(document.getElementById("xPos").value, 10);
+  const initY = parseInt(document.getElementById("yPos").value, 10);
+  const initVelX = parseInt(document.getElementById("xVel").value, 10);
+  const initVelY = parseInt(document.getElementById("yVel").value, 10);
+  const solarMass = parseInt(document.getElementById("solMass").value, 10);
+  const temporalResolution = parseInt(document.getElementById("tempRes").value, 10);
+  const trails = document.getElementById("trails").checked;
 
-  /*if (object.x > 501 || object.x < 0 || object.y > 501 || object.y < 0) {
+  let object = new Point(initX, initY, initVelX, initVelY);
+  let sol = new Point(initHeight / 2, initWidth / 2, 0, 0);
+  sol.mass = solarMass;
+
+  reality = setInterval(function() {
     //----------------------------------------------------//
-    //If the Point object leaves the field of view of the //
-    //  canvas it's reset to its initial state            //
+    //The simulation loop                                 //
     //----------------------------------------------------//
 
-    stop();
-  }*/
+    if (!trails) {
+      ctx.clearRect(0, 0, initHeight, initWidth);
+    }
 
-}, temporalResolution);
+    doGrav(object, sol);
+    move(object);
+
+    object.draw();
+    sol.draw();
+    distance.innerHTML = dist(object, sol);
+    xVel.innerHTML = object.velocityX;
+    yVel.innerHTML = object.velocityY;
+
+    /*if (object.x > 501 || object.x < 0 || object.y > 501 || object.y < 0) {
+      //----------------------------------------------------//
+      //If the Point object leaves the field of view of the //
+      //  canvas it's reset to its initial state            //
+      //----------------------------------------------------//
+
+      stop();
+    }*/
+
+  }, temporalResolution);
+}

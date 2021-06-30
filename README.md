@@ -58,8 +58,8 @@ we just need to plug in our numbers:
 3. Find the angle between the two objects.
 
 I need to do this to calculate the velocity change (a.k.a. force) along the x and
-y axes each cycle of the simulation. To do this we need 𝕋𝕣𝕚𝕘𝕠𝕟𝕠𝕞𝕖𝕥𝕣𝕪®. Since we know the relative x and y positions of the two objects we need to use JavaScript's `Math.atan();` function. `Math.atan(opposite/adjacent);` will give us the angle in radians between
-our objects. In this case I used the y distance between the two objects for opposite
+y axes each cycle of the simulation. To do this we need 𝕋𝕣𝕚𝕘𝕠𝕟𝕠𝕞𝕖𝕥𝕣𝕪®. Since we know the relative x and y positions of the two objects we need to use JavaScript's `Math.atan();` function. `Math.atan(opposite/adjacent);` will give us the angle between
+our objects in radians. In this case I used the y distance between the two objects for opposite
 and the x distance for adjacent:
 
 `angle = Math.atan((obj1.y - obj2.y) / (obj1.x - obj2.x));`
@@ -77,3 +77,18 @@ the `Math.sin();` function:
 `xChange = grav * Math.cos(angle);`
 
 `yChange = grav * Math.sin(angle);`
+
+5. Move the object.
+
+Now that we know the change in velocity we can add it to our current velocity and
+move our object.
+
+### Problems
+
+I've got some janky code in here because I'm doing something stupid with my arctangent
+function because I don't remember any trig from school and I've had to reteach myself
+everything I know.
+
+Right now I'm measuring the angle between points w/ the moving object at the center
+but I'm going to try using the fixed object as the center and reversing the direction
+of the force.

@@ -11,16 +11,41 @@
     </style>
   </head>
   <body>
-    <div id="space">
+    <div id="gridBox">
+      <div id="space">
+      </div>
+      <div id="input">
+        Initial Position<br>
+        x:<input type="number" id="xPos" value="200">
+        y:<input type="number" id="yPos" value="375">
+        <br><br>
+        Initial Velocity<br>
+        x:<input type="number" id="xVel" value="-2">
+        y:<input type="number" id="yVel" value="0">
+        <br><br>
+        Solar Mass<br>
+        <input type="number" id="solMass" value="100000000">
+        <br><br>
+        Temporal Resolution<br>
+        <input type="number" id="tempRes" value="10">
+        <br><br>
+        Show Trails<br>
+        <input type="checkbox" id="trails" checked>
+      </div>
+      <div id="buttons">
+        <input type="button" onclick="start()" value="Start">
+        <input type="button" onclick="reset()" value="Reset">
+        <input type="button" onclick="stop()" value="Stop">
+      </div>
+      <div id="output">
+        <br>
+        X velocity: <span id="velX"></span>
+        <br>
+        Y velocity: <span id="velY"></span>
+        <br>
+        Distance: <span id="dist"></span>
+      </div>
     </div>
-    <input type="button" onclick="reset()" value="Reset">
-    <input type="button" onclick="stop()" value="Stop">
-    <br>
-    X velocity: <span id="velX"></span>
-    <br>
-    Y velocity: <span id="velY"></span>
-    <br>
-    Distance: <span id="dist"></span>
   </body>
   <script src="physics-exp-1.js"></script>
 
