@@ -9,6 +9,8 @@ const space = document.getElementById("space");
 space.appendChild(canvas);
 const ctx = canvas.getContext("2d");
 ctx.fillStyle = "#ffffff";
+let avgDist = [0, 0];
+let sdPop = [];
 
 //
 //A modified gravitational constant
@@ -17,6 +19,8 @@ const G = 6.674 * (10 ** -6);
 const distance = document.getElementById("dist");
 const xVel = document.getElementById("velX");
 const yVel = document.getElementById("velY");
+const avgDistance = document.getElementById("avgDist");
+const stdDev = document.getElementById("stdDev");
 
 function makeCanvas(id, height = 500, width = 500) {
   //----------------------------------------------------//
@@ -38,6 +42,42 @@ function makeCanvas(id, height = 500, width = 500) {
   return canvas;
 }
 
+function getAverage(average, newNumber) {
+  //----------------------------------------------------//
+  //Calculates an average given the previous average,   //
+  //  the number of items averaged, and a new value     //
+  //----------------------------------------------------//
+  //average[0](float) -> the previous average           //
+  //average[1](integer) -> the number of values averaged//
+  //  so far                                            //
+  //newNumber(float) -> new number to be incorporated to//
+  //  the average                                       //
+  //----------------------------------------------------//
+  //return(array) -> the array w/ the updated average   //
+  //  and number of values averaged so far              //
+  //----------------------------------------------------//
+
+  average[0] = ((average[0] * average[1]) + parseFloat(newNumber, 10)) / (average[1] + 1);
+  average[1]++;
+  return average;
+}
+
+function getSD(average, population) {
+  //----------------------------------------------------//
+  //Calculates standard deviation of the runtimes       //
+  //float-> average: average program runtime            //
+  //array-> population: an array of runtimes            //
+  //----------------------------------------------------//
+
+  //average = Number(average);
+  let variance = 0;
+  for (let i = 0; i < population.length; i++) {
+    variance += (population[i] - average) ** 2;
+  }
+  variance /= population.length;
+  return Math.sqrt(variance).toFixed(3);;
+}
+
 function dist(obj1, obj2) {
   //----------------------------------------------------//
   //Finds the pixel distance between two points         //
@@ -57,6 +97,7 @@ function reset() {
   //----------------------------------------------------//
 
   stop();
+  avgDist = [0, 0];
   start();
 }
 
@@ -94,6 +135,9 @@ function doGrav(obj1, obj2) {
   //
   //Finds the distance between my objects
   let r = dist(obj1, obj2);
+  sdPop.push(r);
+  avgDist = getAverage(avgDist, r);
+  //console.log(avgDist, r);
 
   //
   //Finds the force exerted by gravity
@@ -197,6 +241,8 @@ function start() {
     distance.innerHTML = dist(object, sol);
     xVel.innerHTML = object.velocityX;
     yVel.innerHTML = object.velocityY;
+    avgDistance.innerHTML = avgDist[0];
+    stdDev.innerHTML = getSD(avgDist[0], sdPop);
 
   }, temporalResolution);
 }
