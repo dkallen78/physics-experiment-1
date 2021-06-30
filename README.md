@@ -85,6 +85,8 @@ move our object.
 
 ### Problems
 
+1. Janky Code
+
 I've got some janky code in here because I'm doing something stupid with my arctangent
 function because I don't remember any trig from school and I've had to reteach myself
 everything I know.
@@ -92,3 +94,8 @@ everything I know.
 Right now I'm measuring the angle between points w/ the moving object at the center
 but I'm going to try using the fixed object as the center and reversing the direction
 of the force.
+
+2. 3+ Body Problem
+
+I need to figure out a way to scale the number of objects in my simulation w/out
+copious, ugly code.
