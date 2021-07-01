@@ -219,14 +219,40 @@ function start() {
   }, temporalResolution);
 }
 
-function init() {
-  const initX = document.getElementById("xPos").value = 150;
-  const initY = document.getElementById("yPos").value = 500;
-  const initVelX = document.getElementById("xVel").value = 0;
-  const initVelY = document.getElementById("yVel").value = -.5;
-  const solarMass = document.getElementById("solMass").value = 100000000;
-  const temporalResolution = document.getElementById("tempRes").value = 10;
-  const trails = document.getElementById("trails").checked = true;
+function init(x = 150, y = 500, xv = 0, yv = -.5, sol = 100000000) {
+
+  document.getElementById("xPos").value = x;
+  document.getElementById("yPos").value = y;
+  document.getElementById("xVel").value = xv;
+  document.getElementById("yVel").value = yv;
+  document.getElementById("solMass").value = sol;
+  document.getElementById("tempRes").value = 10;
+  document.getElementById("trails").checked = true;
+  document.getElementById("shareLink").value = "";
 }
 
-init();
+function shareLink() {
+  let x = document.getElementById("xPos").value;
+  let y = document.getElementById("yPos").value;
+  let xv = document.getElementById("xVel").value;
+  let yv = document.getElementById("yVel").value;
+  let sol = document.getElementById("solMass").value;
+
+  let baseURL = `https://dkallen78.github.io/physics-experiment-1/physics-exp-1.html`;
+  //let baseURL = `file:///C:/Users/shady/Desktop/Programs/Javascript/physics-experiment-1/physics-exp-1.html`;
+  let parameters = `?x=${x}&y=${y}&xv=${xv}&yv=${yv}&sol=${sol}`;
+  document.getElementById("shareLink").innerHTML = baseURL + parameters;
+}
+
+const params = new URLSearchParams(window.location.search)
+
+if (params.has("x")) {
+  init(params.get("x"), params.get("y"), params.get("xv"), params.get("yv"), params.get("sol"));
+} else {
+  init();
+}
+
+/*
+file:///C:/Users/shady/Desktop/Programs/Javascript/physics-experiment-1/physics-exp-1.html?x=350&y=375&xv=0&yv=-5&sol=100000000
+https://dkallen78.github.io/physics-experiment-1/physics-exp-1.html?x=350&y=375&xv=0&yv=-5&sol=100000000
+*/
