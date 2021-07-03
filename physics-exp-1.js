@@ -14,7 +14,7 @@ let distVar = [0, 0];
 
 //
 //A modified gravitational constant
-const G = 6.674 * (10 ** -6);
+//const G = 6.674 * (10 ** -6);
 
 const cyclesSpan = document.getElementById("cycles");
 const distance = document.getElementById("dist");
@@ -77,6 +77,25 @@ function dist(obj1, obj2) {
   return (Math.sqrt(((obj1.x - obj2.x) ** 2) + ((obj1.y - obj2.y) ** 2))).toFixed(4);
 }
 
+function gravity(mass1, mass2, distance) {
+  /*----------------------------------------------------//
+  //Finds the gravitational force between two objects   //
+  //----------------------------------------------------//
+  //mass1(float): mass of the first object              //
+  //mass2(float): mass of the second object             //
+  //distance(float): distance between the two objects   //
+  //----------------------------------------------------//
+  //return(float)-> gravitational force between the     //
+  //  two objects                                       //
+  //----------------------------------------------------*/
+
+  //
+  //A modified gravitational constant
+  const G = 6.674 * (10 ** -6);
+
+  return grav = G * ((mass1 * mass2) / (distance ** 2));
+}
+
 function reset() {
   /*----------------------------------------------------//
   //Resets the simulation to its starting point         //
@@ -117,7 +136,8 @@ function doGrav(obj1, obj2) {
   distVar = getAverage(distVar, ((r - avgDist[0]) ** 2));
   //
   //Finds the force exerted by gravity
-  let grav = G * ((obj1.mass * obj2.mass) / (r ** 2));
+  //let grav = G * ((obj1.mass * obj2.mass) / (r ** 2));
+  let grav = gravity(obj1.mass, obj2.mass, r);
   //
   //The angle between two objects
   angle = Math.atan((obj1.y - obj2.y) / (obj1.x - obj2.x));
